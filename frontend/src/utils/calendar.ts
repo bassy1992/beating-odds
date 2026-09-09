@@ -1,4 +1,4 @@
-import { Attendee, EventDetails } from '../types';
+import { EventDetails } from '../types';
 
 /**
  * Generate Google Calendar direct URL
@@ -59,30 +59,3 @@ export function getWhatsAppShareUrl(pageUrl: string, event: EventDetails): strin
   return `https://api.whatsapp.com/send?text=${text}`;
 }
 
-/**
- * Export attendees list to CSV spreadsheet
- */
-export function exportAttendeesToCsv(attendees: Attendee[]): void {
-  const headers = ['RSVP ID', 'Full Name', 'Telephone', 'Email', 'Attendance Status', 'Extra Guests', 'Checked In', 'Registered Date', 'Notes'];
-
-  const rows = attendees.map((a) => [
-    `"${a.id}"`,
-    `"${a.fullName.replace(/"/g, '""')}"`,
-    `"${a.telephone.replace(/"/g, '""')}"`,
-    `"${a.email.replace(/"/g, '""')}"`,
-    `"${a.status}"`,
-    a.guestCount || 0,
-    a.checkedIn ? 'Yes' : 'No',
-    `"${new Date(a.registeredAt).toLocaleString()}"`,
-    `"${(a.notes || '').replace(/"/g, '""')}"`,
-  ]);
-
-  const csvContent = 'data:text/csv;charset=utf-8,' + [headers.join(','), ...rows.map((e) => e.join(','))].join('\n');
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement('a');
-  link.setAttribute('href', encodedUri);
-  link.setAttribute('download', `Beating_Odds_Attendees_${new Date().toISOString().slice(0, 10)}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-}

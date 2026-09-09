@@ -1,4 +1,4 @@
-export type AttendanceStatus = 'attending' | 'with_guests' | 'virtual' | 'declined';
+export type AttendanceStatus = 'attending' | 'virtual' | 'declined';
 
 export interface Attendee {
   id: string;
@@ -6,10 +6,7 @@ export interface Attendee {
   telephone: string;
   email: string;
   status: AttendanceStatus;
-  guestCount: number;
-  notes?: string;
   attendeeType?: string;
-  dietaryRequirements?: string;
   registeredAt: string;
   checkedIn?: boolean;
 }

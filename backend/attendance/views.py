@@ -17,10 +17,7 @@ def serialize_attendee(attendee):
         'telephone': attendee.telephone,
         'email': attendee.email,
         'status': attendee.status,
-        'guestCount': attendee.guest_count,
         'attendeeType': attendee.attendee_type,
-        'dietaryRequirements': attendee.dietary_requirements,
-        'notes': attendee.notes,
         'registeredAt': attendee.registered_at.isoformat(),
         'checkedIn': attendee.checked_in,
     }
@@ -59,20 +56,12 @@ def attendees(request):
     if status not in valid_statuses:
         return JsonResponse({'error': 'Invalid attendance status.'}, status=400)
 
-    try:
-        guest_count = max(0, int(payload.get('guestCount', 0)))
-    except (TypeError, ValueError):
-        return JsonResponse({'error': 'Guest count must be a number.'}, status=400)
-
     attendee = Attendee.objects.create(
         id=next_attendee_id(),
         full_name=str(payload['fullName']).strip(),
         telephone=str(payload['telephone']).strip(),
         email=str(payload['email']).strip().lower(),
         status=status,
-        guest_count=guest_count,
         attendee_type=str(payload.get('attendeeType', '')).strip(),
-        dietary_requirements=str(payload.get('dietaryRequirements', '')).strip(),
-        notes=str(payload.get('notes', '')).strip(),
     )
     return JsonResponse(serialize_attendee(attendee), status=201)
