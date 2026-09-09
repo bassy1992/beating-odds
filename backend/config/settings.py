@@ -11,7 +11,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         'DJANGO_ALLOWED_HOSTS',
-        '127.0.0.1,localhost,beating-odds-production.up.railway.app',
+        '127.0.0.1,localhost,beating-odds-production.up.railway.app,beating-odds-api-production.up.railway.app',
     ).split(',')
     if host.strip()
 ]
