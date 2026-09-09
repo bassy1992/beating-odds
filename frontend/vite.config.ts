@@ -21,5 +21,9 @@ export default defineConfig(() => {
       // Disable file watching when DISABLE_HMR is true to save CPU during agent edits.
       watch: process.env.DISABLE_HMR === 'true' ? null : {},
     },
+    preview: {
+      host: '0.0.0.0',
+      allowedHosts: ['beating-odds-production.up.railway.app'],
+    },
   };
 });
