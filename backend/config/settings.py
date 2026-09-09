@@ -5,7 +5,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-change-this-in-production')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
-ALLOWED_HOSTS = [host.strip() for host in os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if host.strip()]
+ALLOWED_HOSTS = [
+    host.strip()
+    for host in os.getenv(
+        'DJANGO_ALLOWED_HOSTS',
+        '127.0.0.1,localhost,beating-odds-production.up.railway.app',
+    ).split(',')
+    if host.strip()
+]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -67,7 +74,7 @@ CORS_ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         'CORS_ALLOWED_ORIGINS',
-        'http://localhost:3000,http://127.0.0.1:3000',
+        'http://localhost:3000,http://127.0.0.1:3000,https://beating-odds-foundation-event-rsvp.vercel.app',
     ).split(',')
     if origin.strip()
 ]
