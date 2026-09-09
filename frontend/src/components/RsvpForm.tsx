@@ -21,7 +21,7 @@ import {
 
 interface RsvpFormProps {
   event: EventDetails;
-  onAttendeeRegistered: (attendee: Attendee) => void;
+  onAttendeeRegistered?: (attendee: Attendee) => void;
 }
 
 const COUNTRY_CODES = [
@@ -94,7 +94,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
         dietaryRequirements,
       });
 
-      onAttendeeRegistered(newAttendee);
+      onAttendeeRegistered?.(newAttendee);
       setRegisteredAttendee(newAttendee);
     } catch (error) {
       setErrors({ submit: error instanceof Error ? error.message : 'Unable to save your RSVP.' });
