@@ -13,7 +13,6 @@ import {
   Share2,
   QrCode,
   Heart,
-  MessageSquare,
   AlertCircle,
   Copy,
   Check,
@@ -43,9 +42,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<AttendanceStatus>('attending');
   const [attendeeType, setAttendeeType] = useState('Invited Guest');
-  const [dietaryRequirements, setDietaryRequirements] = useState('No');
-  const [dietaryNotes, setDietaryNotes] = useState('');
-  const [additionalNotes, setAdditionalNotes] = useState('');
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -88,9 +84,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
         email: email.trim().toLowerCase(),
         status,
         guestCount: 0,
-        notes: [dietaryNotes.trim(), additionalNotes.trim()].filter(Boolean).join('\n'),
         attendeeType,
-        dietaryRequirements,
       });
 
       onAttendeeRegistered?.(newAttendee);
@@ -109,9 +103,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
     setEmail('');
     setStatus('attending');
     setAttendeeType('Invited Guest');
-    setDietaryRequirements('No');
-    setDietaryNotes('');
-    setAdditionalNotes('');
     setErrors({});
   };
 
@@ -457,56 +448,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
                   <option>Media</option>
                   <option>Other</option>
                 </select>
-              </div>
-
-              {/* Dietary Requirements */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Do you have any dietary requirements or allergies we should be aware of?
-                </label>
-                <div className="flex gap-2">
-                  {['No', 'Yes'].map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => setDietaryRequirements(option)}
-                      className={`px-5 py-2.5 rounded-xl border text-sm font-semibold transition-all ${
-                        dietaryRequirements === option ? 'border-rose-600 bg-rose-50 text-rose-700 ring-1 ring-rose-600' : 'border-slate-200 bg-slate-50/50 text-slate-700 hover:bg-slate-100'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {dietaryRequirements === 'Yes' && (
-                <textarea
-                  rows={2}
-                  value={dietaryNotes}
-                  onChange={(e) => setDietaryNotes(e.target.value)}
-                  placeholder="Please specify your dietary requirements or allergies"
-                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100 transition-all resize-none"
-                />
-              )}
-
-              {/* Additional Notes */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Is there anything else you would like us to know? (Optional)
-                </label>
-                <div className="relative">
-                  <div className="absolute top-3 left-3 pointer-events-none text-slate-400">
-                    <MessageSquare className="w-4 h-4" />
-                  </div>
-                  <textarea
-                    rows={3}
-                    value={additionalNotes}
-                    onChange={(e) => setAdditionalNotes(e.target.value)}
-                    placeholder="Optional response"
-                    className="w-full pl-10 pr-4 py-2.5 text-sm rounded-xl border border-slate-200 bg-slate-50/50 focus:bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100 transition-all resize-none"
-                  />
-                </div>
               </div>
 
               {/* Submit Button */}
