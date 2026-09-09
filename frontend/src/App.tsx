@@ -11,7 +11,6 @@ import {
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { RsvpForm } from './components/RsvpForm';
-import { Footer } from './components/Footer';
 import { OrganizerPortalModal } from './components/OrganizerPortalModal';
 import { ShareModal } from './components/ShareModal';
 import { Users, Heart, ArrowUp } from 'lucide-react';
@@ -92,9 +91,6 @@ export default function App() {
         />
 
       </main>
-
-      {/* Footer */}
-      <Footer onOpenOrganizer={() => setIsOrganizerOpen(true)} />
 
       {/* Organizer Portal Modal */}
       <OrganizerPortalModal
