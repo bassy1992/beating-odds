@@ -1,14 +1,13 @@
 import React from 'react';
 import { CountdownTimer } from './CountdownTimer';
 import { EVENT_DETAILS } from '../data/eventData';
-import { Calendar, MapPin, Sparkles, HeartHandshake, ArrowDown } from 'lucide-react';
+import { Calendar, Sparkles, HeartHandshake, ArrowDown } from 'lucide-react';
 
 interface HeroProps {
   onScrollToRsvp: () => void;
-  onScrollToLocation: () => void;
 }
 
-export const Hero: React.FC<HeroProps> = ({ onScrollToRsvp, onScrollToLocation }) => {
+export const Hero: React.FC<HeroProps> = ({ onScrollToRsvp }) => {
   return (
     <section className="relative overflow-hidden pt-10 pb-16 sm:pt-14 sm:pb-20 bg-gradient-to-b from-rose-50/60 via-white to-slate-50 border-b border-slate-200/60" id="overview">
       {/* Decorative subtle background accents */}
@@ -45,7 +44,7 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToRsvp, onScrollToLocation }
         </div>
 
         {/* Event Quick Specs Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-2xl mx-auto mb-10 text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-2xl mx-auto mb-10 text-left">
           <div className="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200 shadow-2xs">
             <div className="p-2 rounded-lg bg-rose-50 text-rose-600 shrink-0">
               <Calendar className="w-5 h-5" />
@@ -54,20 +53,6 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToRsvp, onScrollToLocation }
               <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Date & Time</p>
               <p className="text-sm font-semibold text-slate-900">{EVENT_DETAILS.dateString}</p>
               <p className="text-xs text-slate-600">{EVENT_DETAILS.timeString}</p>
-            </div>
-          </div>
-
-          <div
-            onClick={onScrollToLocation}
-            className="flex items-start gap-3 p-3.5 bg-white rounded-xl border border-slate-200 shadow-2xs cursor-pointer hover:border-rose-300 transition-colors"
-          >
-            <div className="p-2 rounded-lg bg-rose-50 text-rose-600 shrink-0">
-              <MapPin className="w-5 h-5" />
-            </div>
-            <div>
-              <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Location</p>
-              <p className="text-sm font-semibold text-slate-900 break-words">{EVENT_DETAILS.venueName}</p>
-              <p className="text-xs text-slate-600">{EVENT_DETAILS.venueCityCountry}</p>
             </div>
           </div>
 
@@ -94,13 +79,6 @@ export const Hero: React.FC<HeroProps> = ({ onScrollToRsvp, onScrollToLocation }
             <ArrowDown className="w-4 h-4" />
           </button>
 
-          <button
-            type="button"
-            onClick={onScrollToLocation}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-semibold text-slate-700 bg-white hover:bg-slate-100 border border-slate-300 rounded-xl transition-colors"
-          >
-            <span>View Venue</span>
-          </button>
         </div>
       </div>
     </section>

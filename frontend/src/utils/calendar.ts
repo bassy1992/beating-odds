@@ -7,12 +7,9 @@ export function getGoogleCalendarUrl(event: EventDetails): string {
   const startTime = '20261114T150000Z';
   const endTime = '20261114T170000Z';
   const title = encodeURIComponent(`${event.title} - ${event.organizationName}`);
-  const details = encodeURIComponent(
-    `${event.description}\n\nVenue: ${event.venueName}, ${event.venueAddress}, ${event.venueCityCountry}\nContact: ${event.contactPhone} | ${event.contactEmail}\nDress Code: ${event.dressCode}`
-  );
-  const location = encodeURIComponent(`${event.venueName}, ${event.venueAddress}, ${event.venueCityCountry}`);
+  const details = encodeURIComponent(`${event.description}\n\nContact: ${event.contactPhone} | ${event.contactEmail}`);
 
-  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}&location=${location}`;
+  return `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startTime}/${endTime}&details=${details}`;
 }
 
 /**
@@ -31,8 +28,7 @@ export function downloadIcsFile(event: EventDetails): void {
     'DTSTART:20261114T150000Z',
     'DTEND:20261114T170000Z',
     `SUMMARY:${event.title} - ${event.organizationName}`,
-    `DESCRIPTION:${event.description.replace(/\n/g, '\\n')}\\n\\nVenue: ${event.venueName}\\nAddress: ${event.venueAddress}`,
-    `LOCATION:${event.venueName}, ${event.venueAddress}, ${event.venueCityCountry}`,
+    `DESCRIPTION:${event.description.replace(/\n/g, '\\n')}`,
     'STATUS:CONFIRMED',
     'END:VEVENT',
     'END:VCALENDAR',
@@ -57,7 +53,6 @@ export function getWhatsAppShareUrl(pageUrl: string, event: EventDetails): strin
     `❤️ You are invited to the *Saving Little Hearts* launch by the *${event.organizationName}*!\n\n` +
       `📅 Date: ${event.dateString}\n` +
       `⏰ Time: ${event.timeString}\n` +
-      `📍 Venue: ${event.venueName}, ${event.venueAddress}, ${event.venueCityCountry}\n\n` +
       `Please let us know if you will be attending so your seat and badge can be reserved:\n` +
       `${pageUrl}`
   );

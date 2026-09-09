@@ -1,7 +1,7 @@
 import React from 'react';
 import { FoundationLogo } from './FoundationLogo';
 import { EVENT_DETAILS } from '../data/eventData';
-import { Phone, Mail, MapPin, Heart, Shield } from 'lucide-react';
+import { Phone, Mail, Heart, Shield } from 'lucide-react';
 
 interface FooterProps {
   onOpenOrganizer: () => void;
@@ -43,10 +43,6 @@ export const Footer: React.FC<FooterProps> = ({ onOpenOrganizer }) => {
               <a href={`mailto:${EVENT_DETAILS.contactEmail}`} className="hover:text-rose-600 transition-colors">
                 {EVENT_DETAILS.contactEmail}
               </a>
-            </div>
-            <div className="flex items-start gap-2 text-slate-600">
-              <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0 mt-0.5" />
-              <span>{EVENT_DETAILS.venueName}, {EVENT_DETAILS.venueAddress}, {EVENT_DETAILS.venueCityCountry}</span>
             </div>
           </div>
 

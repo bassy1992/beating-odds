@@ -11,7 +11,6 @@ import {
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { RsvpForm } from './components/RsvpForm';
-import { EventDetailsSection } from './components/EventDetailsSection';
 import { Footer } from './components/Footer';
 import { OrganizerPortalModal } from './components/OrganizerPortalModal';
 import { ShareModal } from './components/ShareModal';
@@ -66,13 +65,6 @@ export default function App() {
     }
   };
 
-  const scrollToLocation = () => {
-    const elem = document.getElementById('location');
-    if (elem) {
-      elem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  };
-
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -91,7 +83,6 @@ export default function App() {
         {/* Hero with Brand & Live Countdown */}
         <Hero
           onScrollToRsvp={scrollToRsvp}
-          onScrollToLocation={scrollToLocation}
         />
 
         {/* Primary RSVP Registration Section */}
@@ -99,9 +90,6 @@ export default function App() {
           event={EVENT_DETAILS}
           onAttendeeRegistered={handleAttendeeRegistered}
         />
-
-        {/* Event Location, Venue Map & Logistics */}
-        <EventDetailsSection event={EVENT_DETAILS} />
 
       </main>
 

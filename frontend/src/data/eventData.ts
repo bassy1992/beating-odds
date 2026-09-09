@@ -11,16 +11,10 @@ export const EVENT_DETAILS: EventDetails = {
   dateString: 'Saturday, November 14, 2026',
   isoDate: '2026-11-14T15:00:00+00:00',
   timeString: '3:00 PM',
-  venueName: 'Ebenezer Methodist Church, Youth Auditorium',
-  venueAddress: 'Community 20, Tema',
-  venueCityCountry: 'Ghana',
-  googleMapsQuery: 'Ebenezer Methodist Church Youth Auditorium, Community 20, Tema',
   contactEmail: 'contact@beatingoddsfoundation.org',
   contactPhone: '+233 24 555 0192',
   instagramHandle: 'beatingoddsfoundation',
   tiktokHandle: 'beatingoddsfoundation',
-  dressCode: "Foundation's official T-shirt / Semi-Formal Attire",
-  parkingInfo: 'Please follow venue signage and event staff directions on arrival.',
 };
 
 export const INITIAL_ATTENDEES: Attendee[] = [

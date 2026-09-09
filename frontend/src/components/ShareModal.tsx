@@ -27,7 +27,6 @@ export const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onClose, event }
     `Hello,\n\nYou are cordially invited to ${event.title} organized by the ${event.organizationName}.\n\n` +
       `Date: ${event.dateString}\n` +
       `Time: ${event.timeString}\n` +
-      `Venue: ${event.venueName}, ${event.venueAddress}\n\n` +
       `Please RSVP so the foundation can reserve your delegate badge and seating:\n` +
       `${currentUrl}\n\n` +
       `Best regards,\n${event.organizationName}`

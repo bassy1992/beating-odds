@@ -24,15 +24,9 @@ export interface EventDetails {
   dateString: string;
   isoDate: string;
   timeString: string;
-  venueName: string;
-  venueAddress: string;
-  venueCityCountry: string;
-  googleMapsQuery: string;
   contactEmail: string;
   contactPhone: string;
   instagramHandle: string;
   tiktokHandle: string;
-  dressCode: string;
-  parkingInfo: string;
 }
 

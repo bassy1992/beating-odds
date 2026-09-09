@@ -192,10 +192,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
                   <span className="font-semibold text-slate-900 block">Date & Time:</span>
                   {event.dateString} • {event.timeString}
                 </div>
-                <div>
-                  <span className="font-semibold text-slate-900 block">Location:</span>
-                  {event.venueName}, {event.venueAddress}
-                </div>
                 {registeredAttendee.guestCount > 0 && (
                   <div className="sm:col-span-2 text-rose-700 font-medium">
                     + Bringing {registeredAttendee.guestCount} additional companion(s)
