@@ -42,7 +42,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
   const [phoneLocalNumber, setPhoneLocalNumber] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<AttendanceStatus>('attending');
-  const [guestCount, setGuestCount] = useState<number>(0);
   const [attendeeType, setAttendeeType] = useState('Invited Guest');
   const [dietaryRequirements, setDietaryRequirements] = useState('No');
   const [dietaryNotes, setDietaryNotes] = useState('');
@@ -87,8 +86,8 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
         fullName: fullName.trim(),
         telephone: fullTelephone,
         email: email.trim().toLowerCase(),
-        status: status === 'attending' && guestCount > 0 ? 'with_guests' : status,
-        guestCount: status === 'attending' ? guestCount : 0,
+        status,
+        guestCount: 0,
         notes: [dietaryNotes.trim(), additionalNotes.trim()].filter(Boolean).join('\n'),
         attendeeType,
         dietaryRequirements,
@@ -109,7 +108,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
     setPhoneLocalNumber('');
     setEmail('');
     setStatus('attending');
-    setGuestCount(0);
     setAttendeeType('Invited Guest');
     setDietaryRequirements('No');
     setDietaryNotes('');
@@ -442,34 +440,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
                   </button>
                 </div>
               </div>
-
-              {/* Party Size */}
-              {status === 'attending' && (
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200">
-                  <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                    How many people will be attending in your party?
-                  </label>
-                  <div className="flex items-center gap-2">
-                    {[1, 2, 3, 4, 5, 6].map((num) => (
-                      <button
-                        key={num}
-                        type="button"
-                        onClick={() => setGuestCount(num - 1)}
-                        className={`w-10 h-10 rounded-lg text-sm font-bold transition-all ${
-                          guestCount === num - 1
-                            ? 'bg-rose-600 text-white shadow-xs'
-                            : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
-                        }`}
-                      >
-                        {num}
-                      </button>
-                    ))}
-                  </div>
-                  <p className="text-[11px] text-slate-500 mt-2">
-                    Total people in your party: <strong>{guestCount + 1}</strong>
-                  </p>
-                </div>
-              )}
 
               {/* Attendee Type */}
               <div>
