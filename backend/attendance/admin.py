@@ -10,6 +10,9 @@ class AttendeeAdmin(admin.ModelAdmin):
     search_fields = ('id', 'full_name', 'email', 'telephone')
     readonly_fields = ('registered_at',)
 
+    def has_change_permission(self, request, obj=None):
+        return False
+
     @admin.display(description='Attendee number')
     def attendee_number(self, attendee):
         return attendee.telephone
