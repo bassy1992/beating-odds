@@ -23,10 +23,7 @@ export default defineConfig(() => {
     },
     preview: {
       host: '0.0.0.0',
-      allowedHosts: [
-        'beating-odds-production.up.railway.app',
-        'beating-odds-api-production.up.railway.app',
-      ],
+      allowedHosts: 'all',
     },
   };
 });
