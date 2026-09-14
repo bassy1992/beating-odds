@@ -6,7 +6,6 @@ import {
   User,
   Phone,
   Mail,
-  Users,
   CheckCircle2,
   Calendar,
   Download,
@@ -41,7 +40,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
   const [phoneLocalNumber, setPhoneLocalNumber] = useState('');
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<AttendanceStatus>('attending');
-  const [attendeeType, setAttendeeType] = useState('Invited Guest');
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -83,7 +81,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
         telephone: fullTelephone,
         email: email.trim().toLowerCase(),
         status,
-        attendeeType,
       });
 
       onAttendeeRegistered?.(newAttendee);
@@ -101,7 +98,6 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
     setPhoneLocalNumber('');
     setEmail('');
     setStatus('attending');
-    setAttendeeType('Invited Guest');
     setErrors({});
   };
 
@@ -162,7 +158,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
                 <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 border border-rose-100">
                   <QrCode className="w-5 h-5 text-rose-600" />
                   <span className="text-xs font-semibold text-rose-900 uppercase">
-                    {registeredAttendee.status === 'virtual' ? 'Virtual Attendee' : 'In-Person Attendee'}
+                    {registeredAttendee.status === 'attending' ? 'Attending' : 'Unable to attend'}
                   </span>
                 </div>
               </div>
@@ -369,7 +365,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
                 <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
                   Will you be attending the Beating Odds Foundation Launch? <span className="text-rose-500">*</span>
                 </label>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                   <button
                     type="button"
                     onClick={() => setStatus('attending')}
@@ -406,42 +402,7 @@ export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered 
                     </p>
                   </button>
 
-                  <button
-                    type="button"
-                    onClick={() => setStatus('virtual')}
-                    className={`p-3 text-left rounded-xl border transition-all ${
-                      status === 'virtual'
-                        ? 'border-rose-600 bg-rose-50/70 text-slate-900 shadow-2xs ring-1 ring-rose-600'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-700 hover:bg-slate-100'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold">I&apos;m not sure yet.</span>
-                      {status === 'virtual' && <CheckCircle2 className="w-4 h-4 text-rose-600" />}
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      We will be glad to hear from you when you decide.
-                    </p>
-                  </button>
                 </div>
-              </div>
-
-              {/* Attendee Type */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  I am attending as:
-                </label>
-                <select
-                  value={attendeeType}
-                  onChange={(e) => setAttendeeType(e.target.value)}
-                  className="w-full px-4 py-2.5 sm:py-3 text-sm rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 focus:bg-white focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100 transition-all"
-                >
-                  <option>Invited Guest</option>
-                  <option>Corporate / Business Representative</option>
-                  <option>Sponsor / Partner</option>
-                  <option>Media</option>
-                  <option>Other</option>
-                </select>
               </div>
 
               {/* Submit Button */}

@@ -4,7 +4,7 @@ import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { RsvpForm } from './components/RsvpForm';
 import { ShareModal } from './components/ShareModal';
-import { ArrowUp, Heart } from 'lucide-react';
+import { ArrowUp } from 'lucide-react';
 
 export default function App() {
   const [isShareOpen, setIsShareOpen] = useState(false);
@@ -61,18 +61,6 @@ export default function App() {
         onClose={() => setIsShareOpen(false)}
         event={EVENT_DETAILS}
       />
-
-      {/* Floating Bottom Quick RSVP Bar on Mobile */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-30 p-3 bg-white/95 backdrop-blur-md border-t border-slate-200 flex items-center justify-between gap-3 shadow-lg">
-        <button
-          type="button"
-          onClick={scrollToRsvp}
-          className="w-full inline-flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-rose-600 to-red-600 shadow-sm"
-        >
-          <Heart className="w-3.5 h-3.5 fill-white" />
-          <span>Register Attendance</span>
-        </button>
-      </div>
 
       {/* Scroll to Top Floating Button (Desktop) */}
       {showScrollTop && (
