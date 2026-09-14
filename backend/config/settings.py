@@ -11,7 +11,7 @@ ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv(
         'DJANGO_ALLOWED_HOSTS',
-        '127.0.0.1,localhost,beating-odds-production.up.railway.app,beating-odds-api-production.up.railway.app',
+        '127.0.0.1,localhost,beating-odds-production.up.railway.app,beating-odds-api-production.up.railway.app,beating-odds-production-24fa.up.railway.app',
     ).split(',')
     if host.strip()
 ]
@@ -80,7 +80,8 @@ CORS_ALLOWED_ORIGINS = [
         'CORS_ALLOWED_ORIGINS',
         'http://localhost:3000,http://127.0.0.1:3000,'
         'https://beating-odds-foundation-event-rsvp.vercel.app,'
-        'https://beating-odds-api-production.up.railway.app',
+        'https://beating-odds-api-production.up.railway.app,'
+        'https://beating-odds-production-24fa.up.railway.app',
     ).split(',')
     if origin.strip()
 ]
