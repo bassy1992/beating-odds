@@ -37,7 +37,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # CsrfViewMiddleware intentionally omitted — API is csrf_exempt, admin protected by credentials
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -91,9 +91,14 @@ CORS_ALLOWED_ORIGINS = [
 
 CSRF_TRUSTED_ORIGINS = [
     origin.strip()
-    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
+    for origin in os.getenv(
+        'CSRF_TRUSTED_ORIGINS',
+        f'https://{railway_public_domain}',
+    ).split(',')
     if origin.strip()
 ]
+
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Session cookies — secure on HTTPS (Railway), plain on local
 SESSION_COOKIE_SECURE = not DEBUG
