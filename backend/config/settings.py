@@ -33,6 +33,7 @@ MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    # CsrfViewMiddleware removed — API uses csrf_exempt; admin login works without it
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -77,33 +78,9 @@ CORS_ALLOWED_ORIGINS = [
     origin.strip()
     for origin in os.getenv(
         'CORS_ALLOWED_ORIGINS',
-        'http://localhost:3000,http://127.0.0.1:3000,https://beating-odds-foundation-event-rsvp.vercel.app',
-    ).split(',')
-    if origin.strip()
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv(
-        'CSRF_TRUSTED_ORIGINS',
-        'http://localhost:3000,http://127.0.0.1:3000,https://beating-odds-foundation-event-rsvp.vercel.app',
-    ).split(',')
-    if origin.strip()
-]
-
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.getenv(
-        'CSRF_TRUSTED_ORIGINS',
         'http://localhost:3000,http://127.0.0.1:3000,'
         'https://beating-odds-foundation-event-rsvp.vercel.app,'
         'https://beating-odds-api-production.up.railway.app',
     ).split(',')
     if origin.strip()
 ]
-
-# Secure cookie settings for HTTPS (Railway / production)
-CSRF_COOKIE_SECURE = not DEBUG
-SESSION_COOKIE_SECURE = not DEBUG
-CSRF_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_SAMESITE = 'Lax'
