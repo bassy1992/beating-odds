@@ -18,3 +18,12 @@ View your app in AI Studio: https://ai.studio/apps/4464d1cf-c956-413e-b3ad-78721
 2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
 3. Run the app:
    `npm run dev`
+
+## Deploy to Railway
+
+Create a Railway service from this repository with its **Root Directory** set to
+`frontend`. Set `VITE_API_URL` to the public URL of the deployed Django service,
+including `/api`, for example `https://my-api.up.railway.app/api`.
+
+The frontend can be deployed independently as a static Vite site. The backend's
+Railway configuration is kept in `backend/railway.toml`.

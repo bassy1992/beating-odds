@@ -8,7 +8,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-change-this-in-production')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
 
-# Accept any host in production via env var; falls back to localhost for dev
+# Set DJANGO_ALLOWED_HOSTS to the Railway domain (and any custom domain).
 ALLOWED_HOSTS = [
     host.strip()
     for host in os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
@@ -81,6 +81,12 @@ CORS_ALLOWED_ORIGINS = [
         'http://localhost:3000,http://127.0.0.1:3000,'
         'https://beating-odds-foundation-event-rsvp.vercel.app',
     ).split(',')
+    if origin.strip()
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv('CSRF_TRUSTED_ORIGINS', '').split(',')
     if origin.strip()
 ]
 

@@ -10,6 +10,10 @@ from django.core.exceptions import ValidationError
 from .models import Attendee
 
 
+def health(request):
+    return JsonResponse({'status': 'ok'})
+
+
 def serialize_attendee(attendee):
     return {
         'id': attendee.id,
