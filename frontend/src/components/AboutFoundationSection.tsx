@@ -1,109 +1,122 @@
 import React from 'react';
-import { FoundationLogo } from './FoundationLogo';
-import { Heart, Activity, ShieldAlert, Sparkles, ExternalLink, MessageCircle } from 'lucide-react';
+import { Activity, ShieldAlert, Heart, Sparkles, ExternalLink } from 'lucide-react';
+
+const pillars = [
+  {
+    key: 'awareness',
+    name: 'Awareness',
+    icon: <Activity style={{ width: '1.15rem', height: '1.15rem' }} />,
+    iconBg: 'rgba(141,109,67,0.12)',
+    iconColor: 'var(--clr-gold)',
+    desc: 'Educating parents, schools, and health centres on warning signs of congenital and acquired childhood heart disease.',
+  },
+  {
+    key: 'action',
+    name: 'Action',
+    icon: <ShieldAlert style={{ width: '1.15rem', height: '1.15rem' }} />,
+    iconBg: 'rgba(63,81,72,0.1)',
+    iconColor: 'var(--clr-green)',
+    desc: 'Mobilising surgical funding, diagnostic echoes, and emergency medications for children whose families cannot afford care.',
+  },
+  {
+    key: 'impact',
+    name: 'Impact',
+    icon: <Heart style={{ width: '1.15rem', height: '1.15rem' }} />,
+    iconBg: 'rgba(220,38,38,0.08)',
+    iconColor: '#dc2626',
+    desc: 'Restoring healthy futures so every child can run, play, attend school, and thrive alongside their peers.',
+  },
+  {
+    key: 'change',
+    name: 'Change',
+    icon: <Sparkles style={{ width: '1.15rem', height: '1.15rem' }} />,
+    iconBg: 'rgba(37,99,235,0.08)',
+    iconColor: '#2563eb',
+    desc: 'Championing systemic healthcare policy and equipping regional medical centres with paediatric cardiology tools.',
+  },
+];
 
 export const AboutFoundationSection: React.FC = () => {
   return (
-    <section className="py-14 sm:py-20 bg-slate-50 border-t border-slate-200/80" id="foundation">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6">
-        {/* Top Centered Brand Box */}
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <FoundationLogo size="lg" className="justify-center mb-4" />
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">
-            Giving Every Child a Fighting Chance
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-2">
-            Beating Odds Foundation was established with a singular heartbeat: to break the barriers of pediatric heart disease and extreme vulnerability for underserved children.
-          </p>
-        </div>
+    <section className="about-shell" id="foundation">
+      <div className="about-inner">
 
-        {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
-          <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-3">
-              <Activity className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 font-heading mb-1">AWARENESS</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Educating parents, schools, and health centers on the warning signs of congenital and acquired childhood heart disease.
-            </p>
+        {/* Intro */}
+        <div className="about-intro">
+          <div className="about-intro-logo">
+            <img src="/assets/logo6.jpeg" alt="Beating Odds Foundation" />
           </div>
-
-          <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center mb-3">
-              <ShieldAlert className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 font-heading mb-1">ACTION</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Mobilizing surgical funding, diagnostic echoes, and emergency medications for children whose families cannot afford care.
-            </p>
-          </div>
-
-          <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-3">
-              <Heart className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 font-heading mb-1">IMPACT</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Restoring healthy futures so every child can run, play, attend school, and thrive alongside their peers without limitations.
-            </p>
-          </div>
-
-          <div className="p-5 bg-white rounded-2xl border border-slate-200 shadow-2xs">
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-3">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <h3 className="text-base font-bold text-slate-900 font-heading mb-1">CHANGE</h3>
-            <p className="text-xs text-slate-600 leading-relaxed">
-              Championing systemic healthcare policy and equipping regional medical centers with specialized pediatric cardiology tools.
-            </p>
-          </div>
-        </div>
-
-        {/* Socials & Media Callout (As shown in flyer) */}
-        <div className="bg-gradient-to-r from-slate-900 to-slate-800 text-white rounded-2xl p-5 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 shadow-md">
           <div>
-            <span className="text-[11px] font-bold uppercase tracking-widest text-rose-400">
-              Join Our Community Movement
-            </span>
-            <h3 className="text-xl sm:text-2xl font-bold font-heading mt-1">
-              Follow @beatingoddsfoundation
-            </h3>
-            <p className="text-xs sm:text-sm text-slate-300 max-w-lg mt-1">
-              Watch survivor stories, pediatric cardiology education, and behind-the-scenes countdown updates on TikTok and Instagram.
+            <p className="about-eyebrow">About the Foundation</p>
+            <h2 className="about-title">
+              Giving Every Child<br />a Fighting Chance
+            </h2>
+            <p className="about-desc">
+              Beating Odds Foundation was born from one family's journey and a deep desire to help
+              more children born with Down Syndrome and congenital heart defects have a better chance
+              at life. We believe no child should be denied life-saving care because of geography or
+              poverty.
             </p>
           </div>
+        </div>
 
-          <div className="flex flex-wrap items-center gap-2 sm:gap-3 shrink-0">
-            {/* Instagram */}
+        {/* 4 Pillars */}
+        <div className="pillars-grid">
+          {pillars.map((p) => (
+            <div key={p.key} className="pillar-item">
+              <div
+                className="pillar-icon"
+                style={{ background: p.iconBg, color: p.iconColor }}
+              >
+                {p.icon}
+              </div>
+              <p className="pillar-name">{p.name}</p>
+              <p className="pillar-desc">{p.desc}</p>
+            </div>
+          ))}
+        </div>
+
+        {/* Socials banner */}
+        <div className="socials-banner">
+          <div>
+            <p className="socials-eyebrow">Join Our Community Movement</p>
+            <h3 className="socials-title">@beatingoddsfoundation</h3>
+            <p className="socials-sub">
+              Survivor stories, paediatric cardiology education, and event countdown updates — on Instagram &amp; TikTok.
+            </p>
+          </div>
+          <div className="socials-links">
             <a
               href="https://www.instagram.com/beatingoddsfoundation"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition-colors"
+              className="social-link"
             >
-              <svg className="w-4 h-4 fill-currentColor" viewBox="0 0 24 24">
-                <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+              {/* Instagram icon */}
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
               </svg>
-              <span>Instagram</span>
-              <ExternalLink className="w-3 h-3 text-slate-400" />
+              Instagram
+              <ExternalLink style={{ width: '0.65rem', height: '0.65rem', opacity: 0.5 }} />
             </a>
-
-            {/* TikTok */}
             <a
               href="https://www.tiktok.com/@beatingoddsfoundation"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-xs font-semibold text-white transition-colors"
+              className="social-link"
             >
-              <svg className="w-4 h-4 fill-currentColor" viewBox="0 0 24 24">
-                <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.24 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+              {/* TikTok icon */}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.3 6.3 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V8.95a8.19 8.19 0 0 0 4.78 1.52V7.04a4.85 4.85 0 0 1-1.01-.35z" />
               </svg>
-              <span>TikTok</span>
-              <ExternalLink className="w-3 h-3 text-slate-400" />
+              TikTok
+              <ExternalLink style={{ width: '0.65rem', height: '0.65rem', opacity: 0.5 }} />
             </a>
           </div>
         </div>
+
       </div>
     </section>
   );

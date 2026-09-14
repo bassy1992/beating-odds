@@ -1,5 +1,4 @@
 import React from 'react';
-import { FoundationLogo } from './FoundationLogo';
 import { Share2 } from 'lucide-react';
 
 interface NavbarProps {
@@ -7,46 +6,56 @@ interface NavbarProps {
   onScrollToRsvp: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({
-  onOpenShare,
-  onScrollToRsvp,
-}) => {
+export const Navbar: React.FC<NavbarProps> = ({ onOpenShare, onScrollToRsvp }) => {
   return (
-    <header className="invitation-header sticky top-0 z-40 w-full transition-all">
-      <div className="max-w-6xl mx-auto px-3 sm:px-6 min-h-[4.5rem] py-2 flex items-center justify-between gap-2 sm:gap-4">
-        {/* Foundation Branding */}
-        <a href="#top" className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-          <FoundationLogo size="sm" className="brand-mark" />
+    <header className="nav-shell">
+      <div className="nav-inner">
+        {/* Logo */}
+        <a href="#top" className="nav-logo">
+          <img src="/assets/logo6.jpeg" alt="Beating Odds Foundation" />
+          <div className="nav-logo-text">
+            <strong>Beating Odds</strong>
+            <span>Foundation</span>
+          </div>
         </a>
 
-        {/* Desktop Quick Nav */}
-        <nav className="hidden md:flex items-center gap-6 text-xs font-semibold uppercase tracking-[0.16em] text-stone-500">
-          <a href="#overview" className="hover:text-stone-900 transition-colors">
-            Invitation
-          </a>
+        {/* Nav links – desktop */}
+        <nav className="nav-links" style={{ display: 'none' }} aria-hidden="true">
+          {/* hidden on mobile via CSS below */}
+        </nav>
+        <nav className="nav-links hidden-mobile">
+          <a href="#overview">Event</a>
+          <a href="#rsvp-form">RSVP</a>
+          <a href="#foundation">About</a>
         </nav>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
+        {/* Actions */}
+        <div className="nav-actions">
           <button
             type="button"
             onClick={onOpenShare}
-            className="inline-flex items-center justify-center gap-1.5 px-2 sm:px-3 py-2 text-xs font-semibold text-stone-700 hover:text-stone-950 transition-colors"
-            title="Share RSVP link with others"
+            className="nav-btn-ghost"
+            title="Share RSVP link"
           >
-            <Share2 className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Share Link</span>
+            <Share2 style={{ width: '0.85rem', height: '0.85rem' }} />
+            <span className="hide-xs">Share</span>
           </button>
-
           <button
             type="button"
             onClick={onScrollToRsvp}
-            className="inline-flex items-center justify-center px-3 sm:px-4 py-2 text-xs sm:text-sm font-bold text-white bg-[#3f5148] hover:bg-[#33443b] rounded-full transition-colors"
+            className="nav-btn-primary"
           >
             RSVP Now
           </button>
         </div>
       </div>
+
+      <style>{`
+        @media (max-width: 640px) {
+          .hidden-mobile { display: none !important; }
+          .hide-xs { display: none; }
+        }
+      `}</style>
     </header>
   );
 };

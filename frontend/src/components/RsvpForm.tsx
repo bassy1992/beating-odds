@@ -3,18 +3,8 @@ import { Attendee, AttendanceStatus, EventDetails } from '../types';
 import { getGoogleCalendarUrl, downloadIcsFile, getWhatsAppShareUrl } from '../utils/calendar';
 import { registerAttendee } from '../utils/api';
 import {
-  User,
-  Phone,
-  Mail,
-  CheckCircle2,
-  Calendar,
-  Download,
-  Share2,
-  QrCode,
-  Heart,
-  AlertCircle,
-  Copy,
-  Check,
+  CheckCircle2, Calendar, Download, Share2,
+  Heart, AlertCircle, Copy, Check, Loader,
 } from 'lucide-react';
 
 interface RsvpFormProps {
@@ -25,415 +15,319 @@ interface RsvpFormProps {
 const COUNTRY_CODES = [
   { code: '+233', label: 'Ghana (+233)' },
   { code: '+234', label: 'Nigeria (+234)' },
-  { code: '+1', label: 'US / Canada (+1)' },
-  { code: '+44', label: 'United Kingdom (+44)' },
-  { code: '+27', label: 'South Africa (+27)' },
+  { code: '+1',   label: 'US/CA (+1)' },
+  { code: '+44',  label: 'UK (+44)' },
+  { code: '+27',  label: 'SA (+27)' },
   { code: '+254', label: 'Kenya (+254)' },
-  { code: '+49', label: 'Germany (+49)' },
-  { code: '+33', label: 'France (+33)' },
+  { code: '+49',  label: 'Germany (+49)' },
+  { code: '+33',  label: 'France (+33)' },
   { code: '+971', label: 'UAE (+971)' },
 ];
 
 export const RsvpForm: React.FC<RsvpFormProps> = ({ event, onAttendeeRegistered }) => {
-  const [fullName, setFullName] = useState('');
-  const [phoneCountryCode, setPhoneCountryCode] = useState('+233');
-  const [phoneLocalNumber, setPhoneLocalNumber] = useState('');
-  const [email, setEmail] = useState('');
-  const [status, setStatus] = useState<AttendanceStatus>('attending');
-
-  const [errors, setErrors] = useState<{ [key: string]: string }>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fullName, setFullName]                   = useState('');
+  const [phoneCountryCode, setPhoneCountryCode]   = useState('+233');
+  const [phoneLocalNumber, setPhoneLocalNumber]   = useState('');
+  const [email, setEmail]                         = useState('');
+  const [status, setStatus]                       = useState<AttendanceStatus>('attending');
+  const [attendanceChoice, setAttendanceChoice]   = useState<AttendanceStatus | null>(null);
+  const [errors, setErrors]                       = useState<Record<string, string>>({});
+  const [isSubmitting, setIsSubmitting]           = useState(false);
   const [registeredAttendee, setRegisteredAttendee] = useState<Attendee | null>(null);
-  const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedLink, setCopiedLink]               = useState(false);
 
   const validate = (): boolean => {
-    const newErrors: { [key: string]: string } = {};
-
-    if (!fullName.trim() || fullName.trim().length < 2) {
-      newErrors.fullName = 'Please enter your full name';
-    }
-
+    const e: Record<string, string> = {};
+    if (!fullName.trim() || fullName.trim().length < 2)
+      e.fullName = 'Please enter your full name (at least 2 characters).';
     const cleanPhone = phoneLocalNumber.replace(/\s+/g, '');
-    if (!cleanPhone || cleanPhone.length < 6) {
-      newErrors.phone = 'Please enter a valid telephone or WhatsApp number';
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!email.trim() || !emailRegex.test(email.trim())) {
-      newErrors.email = 'Please provide a valid email address';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    if (!cleanPhone || cleanPhone.length < 6)
+      e.phone = 'Please enter a valid phone or WhatsApp number.';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()))
+      e.email = 'Please provide a valid email address.';
+    setErrors(e);
+    return Object.keys(e).length === 0;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validate()) return;
-
     setIsSubmitting(true);
-
-    const fullTelephone = `${phoneCountryCode} ${phoneLocalNumber.trim()}`;
-
     try {
       const newAttendee = await registerAttendee({
         fullName: fullName.trim(),
-        telephone: fullTelephone,
+        telephone: `${phoneCountryCode} ${phoneLocalNumber.trim()}`,
         email: email.trim().toLowerCase(),
         status,
       });
-
       onAttendeeRegistered?.(newAttendee);
       setRegisteredAttendee(newAttendee);
-    } catch (error) {
-      setErrors({ submit: error instanceof Error ? error.message : 'Unable to save your RSVP.' });
+    } catch (err) {
+      setErrors({ submit: err instanceof Error ? err.message : 'Unable to save your RSVP. Please try again.' });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const resetFormForAnother = () => {
+  const resetForm = () => {
     setRegisteredAttendee(null);
-    setFullName('');
-    setPhoneLocalNumber('');
-    setEmail('');
-    setStatus('attending');
-    setErrors({});
+    setFullName(''); setPhoneLocalNumber(''); setEmail('');
+    setStatus('attending'); setAttendanceChoice('attending'); setErrors({});
   };
 
-  const handleCopyShare = () => {
+  const handleCopyLink = () => {
     navigator.clipboard.writeText(window.location.href);
     setCopiedLink(true);
     setTimeout(() => setCopiedLink(false), 2500);
   };
 
   return (
-    <section className="py-12 sm:py-16 bg-white" id="rsvp-form">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6">
-        {/* Section Header */}
-        <div className="text-center max-w-xl mx-auto mb-8">
-          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-rose-50 text-rose-700 text-xs font-bold uppercase tracking-wider mb-2">
-            <Heart className="w-3.5 h-3.5 fill-rose-500 text-rose-500" />
-            <span>Attendance Registration</span>
+    <section className="rsvp-shell" id="rsvp-form">
+      <div className="rsvp-inner">
+
+        {/* Header */}
+        <div className="rsvp-header">
+          <div>
+            <span className="rsvp-eyebrow">
+              <Heart style={{ width: '0.7rem', height: '0.7rem', fill: 'currentColor' }} />
+              Attendance Registration
+            </span>
           </div>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight font-heading">
-            Will You Join Us?
-          </h2>
-          <p className="text-slate-600 text-sm sm:text-base mt-2">
-            Kindly confirm your attendance for the Beating Odds Foundation launch.
+          <h2 className="rsvp-title">Will You Join Us?</h2>
+          <p className="rsvp-subtitle">
+            Kindly confirm your attendance for the Beating Odds Foundation launch.<br />
+            Your seat and badge will be reserved once you register.
           </p>
         </div>
 
-        {/* Confirmation Screen / Digital Pass */}
+        {/* Attend / Decline toggle */}
+        {!registeredAttendee && (
+          <div className="rsvp-toggle" role="radiogroup" aria-label="Attendance selection">
+            <button
+              type="button"
+              role="radio"
+              aria-checked={attendanceChoice === 'attending'}
+              onClick={() => { setAttendanceChoice('attending'); setStatus('attending'); }}
+              className={`rsvp-toggle-btn${attendanceChoice === 'attending' ? ' active' : ''}`}
+            >
+              <CheckCircle2 style={{ width: '0.85rem', height: '0.85rem' }} />
+              I Will Attend
+            </button>
+            <button
+              type="button"
+              role="radio"
+              aria-checked={attendanceChoice === 'declined'}
+              onClick={() => { setAttendanceChoice('declined'); setStatus('declined'); }}
+              className={`rsvp-toggle-btn${attendanceChoice === 'declined' ? ' active' : ''}`}
+            >
+              <AlertCircle style={{ width: '0.85rem', height: '0.85rem' }} />
+              Cannot Attend
+            </button>
+          </div>
+        )}
+
+        {/* ── CONFIRMED ── */}
         {registeredAttendee ? (
-          <div className="bg-gradient-to-b from-rose-50/50 to-white rounded-2xl border-2 border-rose-200 p-6 sm:p-8 shadow-md">
-            <div className="text-center mb-6">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-100 text-emerald-600 mb-3 shadow-xs">
-                <CheckCircle2 className="w-8 h-8" />
-              </div>
-              <h3 className="text-2xl font-bold text-slate-900 font-heading">
-                RSVP Successfully Confirmed!
-              </h3>
-              <p className="text-slate-600 text-sm mt-1">
-                Thank you, <span className="font-semibold text-slate-900">{registeredAttendee.fullName}</span>. We have saved your reservation for Saving Little Hearts.
-              </p>
+          <div className="confirm-card">
+            <div className="confirm-badge">
+              <CheckCircle2 style={{ width: '1.75rem', height: '1.75rem', color: '#fffdf9' }} />
+            </div>
+            <p style={{ fontSize: '0.62rem', fontWeight: 800, letterSpacing: '0.22em', textTransform: 'uppercase', color: 'var(--clr-gold)', marginBottom: '0.25rem' }}>
+              Registration Confirmed
+            </p>
+            <h3 className="confirm-name">{registeredAttendee.fullName}</h3>
+            <p style={{ fontSize: '0.8rem', color: 'var(--clr-muted)', margin: '0.25rem 0 0' }}>
+              {registeredAttendee.status === 'attending' ? 'In-Person Attendee' : 'Virtual Attendee'}
+            </p>
+            <div className="confirm-divider" />
+            <div className="confirm-detail-row">
+              <Calendar style={{ width: '0.85rem', height: '0.85rem', color: 'var(--clr-gold)' }} />
+              <span>{event.dateString} · {event.timeString}</span>
+            </div>
+            <div className="confirm-detail-row">
+              <Heart style={{ width: '0.85rem', height: '0.85rem', color: 'var(--clr-gold)', fill: 'var(--clr-gold)' }} />
+              <span>Beating Odds Foundation — Saving Little Hearts</span>
             </div>
 
-            {/* Official Digital Pass Card */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm mb-6 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-28 h-28 bg-rose-500/10 rounded-full blur-2xl pointer-events-none" />
-              
-              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
-                <div>
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-rose-600">
-                    Official Event Pass
-                  </span>
-                  <p className="text-xl font-extrabold text-slate-900 font-heading">
-                    {registeredAttendee.fullName}
-                  </p>
-                  <p className="text-xs text-slate-500">
-                    Badge ID: <span className="font-mono font-bold text-slate-800">{registeredAttendee.id}</span>
-                  </p>
-                </div>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-rose-50 border border-rose-100">
-                  <QrCode className="w-5 h-5 text-rose-600" />
-                  <span className="text-xs font-semibold text-rose-900 uppercase">
-                    {registeredAttendee.status === 'attending' ? 'Attending' : 'Unable to attend'}
-                  </span>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-600 mb-4">
-                <div>
-                  <span className="font-semibold text-slate-900 block">Telephone / WhatsApp:</span>
-                  {registeredAttendee.telephone}
-                </div>
-                <div>
-                  <span className="font-semibold text-slate-900 block">Email Address:</span>
-                  {registeredAttendee.email}
-                </div>
-                <div>
-                  <span className="font-semibold text-slate-900 block">Date & Time:</span>
-                  {event.dateString} • {event.timeString}
-                </div>
-              </div>
-
-              <div className="text-[11px] text-slate-400 border-t border-slate-100 pt-3 flex items-center justify-between">
-                <span>Show this badge or mention your name at the registration desk.</span>
-                <span className="font-mono">{new Date(registeredAttendee.registeredAt).toLocaleDateString()}</span>
-              </div>
-            </div>
-
-            {/* Quick Actions (Add to Calendar, WhatsApp share, etc.) */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-6">
+            <div className="confirm-actions">
               <a
                 href={getGoogleCalendarUrl(event)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl transition-colors shadow-2xs"
+                className="confirm-action-btn"
               >
-                <Calendar className="w-4 h-4 text-rose-600" />
-                <span>Add to Google Calendar</span>
+                <Calendar style={{ width: '0.8rem', height: '0.8rem' }} />
+                Google Calendar
               </a>
-
-              <button
-                type="button"
-                onClick={() => downloadIcsFile(event)}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs sm:text-sm font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl transition-colors shadow-2xs"
-              >
-                <Download className="w-4 h-4 text-slate-600" />
-                <span>Download .ICS Calendar Event</span>
+              <button type="button" onClick={() => downloadIcsFile(event)} className="confirm-action-btn">
+                <Download style={{ width: '0.8rem', height: '0.8rem' }} />
+                Download .ics
               </button>
-
+              <button type="button" onClick={handleCopyLink} className="confirm-action-btn">
+                {copiedLink
+                  ? <Check style={{ width: '0.8rem', height: '0.8rem', color: 'var(--clr-green)' }} />
+                  : <Copy style={{ width: '0.8rem', height: '0.8rem' }} />}
+                {copiedLink ? 'Copied!' : 'Copy Link'}
+              </button>
               <a
                 href={getWhatsAppShareUrl(window.location.href, event)}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs sm:text-sm font-semibold text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl transition-colors shadow-2xs"
+                className="confirm-action-btn primary"
               >
-                <Share2 className="w-4 h-4" />
-                <span>Share Invite via WhatsApp</span>
+                <Share2 style={{ width: '0.8rem', height: '0.8rem' }} />
+                Share on WhatsApp
               </a>
-
-              <button
-                type="button"
-                onClick={handleCopyShare}
-                className="inline-flex items-center justify-center gap-2 px-4 py-3 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors"
-              >
-                {copiedLink ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4 text-slate-500" />}
-                <span>{copiedLink ? 'Link Copied!' : 'Copy Invitation Link'}</span>
-              </button>
             </div>
 
-            <div className="text-center pt-2">
-              <button
-                type="button"
-                onClick={resetFormForAnother}
-                className="text-xs font-semibold text-rose-600 hover:text-rose-700 hover:underline"
-              >
-                Register Another Colleague or Guest →
-              </button>
-            </div>
+            <button
+              type="button"
+              onClick={resetForm}
+              style={{
+                marginTop: '1.5rem', background: 'none', border: 'none', cursor: 'pointer',
+                fontSize: '0.72rem', color: 'var(--clr-muted)', textDecoration: 'underline',
+              }}
+            >
+              Register another person
+            </button>
           </div>
-        ) : (
-          /* The Main Form */
-          <form
-            onSubmit={handleSubmit}
-            className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-8 shadow-sm transition-all"
-            noValidate
-          >
-            <div className="space-y-5">
+
+        ) : attendanceChoice === 'attending' ? (
+          /* ── FORM ── */
+          <div className="rsvp-card">
+            <form onSubmit={handleSubmit} noValidate>
               {/* Full Name */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Full Name <span className="text-rose-500">*</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <User className="w-4 h-4" />
-                  </div>
-                  <input
-                    type="text"
-                    required
-                    value={fullName}
-                    onChange={(e) => {
-                      setFullName(e.target.value);
-                      if (errors.fullName) setErrors({ ...errors, fullName: '' });
-                    }}
-                    placeholder="e.g., Kofi Mensah or Sarah Ofori"
-                    className={`w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm rounded-xl border bg-slate-50/50 focus:bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ${
-                      errors.fullName
-                        ? 'border-rose-400 ring-2 ring-rose-100'
-                        : 'border-slate-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-100'
-                    }`}
-                  />
-                </div>
-                {errors.fullName && (
-                  <p className="flex items-center gap-1 text-xs text-rose-600 mt-1 font-medium">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.fullName}
-                  </p>
-                )}
+              <div className="field-group">
+                <label className="field-label" htmlFor="fullName">Full Name</label>
+                <input
+                  id="fullName"
+                  type="text"
+                  autoComplete="name"
+                  placeholder="e.g. Abena Mensah"
+                  value={fullName}
+                  onChange={(e) => setFullName(e.target.value)}
+                  className="field-input"
+                  aria-describedby={errors.fullName ? 'fullName-err' : undefined}
+                />
+                {errors.fullName && <p className="field-error" id="fullName-err">{errors.fullName}</p>}
               </div>
 
-              {/* Telephone & WhatsApp Number */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Telephone / WhatsApp Number <span className="text-rose-500">*</span>
-                </label>
-                <div className="flex gap-2">
+              {/* Phone */}
+              <div className="field-group">
+                <label className="field-label" htmlFor="phoneLocal">Phone / WhatsApp</label>
+                <div className="phone-row">
                   <select
                     value={phoneCountryCode}
                     onChange={(e) => setPhoneCountryCode(e.target.value)}
-                    className="w-32 sm:w-40 px-2.5 py-2.5 sm:py-3 text-xs sm:text-sm rounded-xl border border-slate-200 bg-slate-50/50 text-slate-900 focus:bg-white focus:outline-none focus:border-rose-500 focus:ring-2 focus:ring-rose-100 transition-all shrink-0"
+                    className="phone-select"
+                    aria-label="Country calling code"
                   >
-                    {COUNTRY_CODES.map((item) => (
-                      <option key={item.code} value={item.code}>
-                        {item.label}
-                      </option>
+                    {COUNTRY_CODES.map((c) => (
+                      <option key={c.code} value={c.code}>{c.label}</option>
                     ))}
                   </select>
-
-                  <div className="relative flex-1">
-                    <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                      <Phone className="w-4 h-4" />
-                    </div>
-                    <input
-                      type="tel"
-                      required
-                      value={phoneLocalNumber}
-                      onChange={(e) => {
-                        setPhoneLocalNumber(e.target.value);
-                        if (errors.phone) setErrors({ ...errors, phone: '' });
-                      }}
-                      placeholder="e.g., 024 123 4567"
-                      className={`w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm rounded-xl border bg-slate-50/50 focus:bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ${
-                        errors.phone
-                          ? 'border-rose-400 ring-2 ring-rose-100'
-                          : 'border-slate-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-100'
-                      }`}
-                    />
-                  </div>
-                </div>
-                {errors.phone ? (
-                  <p className="flex items-center gap-1 text-xs text-rose-600 mt-1 font-medium">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.phone}
-                  </p>
-                ) : (
-                  <p className="text-[11px] text-slate-500 mt-1">
-                    We will send attendance updates and event reminders to this number.
-                  </p>
-                )}
-              </div>
-
-              {/* Email Address */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
-                  Email Address <span className="text-rose-500">*</span>
-                </label>
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                    <Mail className="w-4 h-4" />
-                  </div>
                   <input
-                    type="email"
-                    required
-                    value={email}
-                    onChange={(e) => {
-                      setEmail(e.target.value);
-                      if (errors.email) setErrors({ ...errors, email: '' });
-                    }}
-                    placeholder="name@example.com"
-                    className={`w-full pl-10 pr-4 py-2.5 sm:py-3 text-sm rounded-xl border bg-slate-50/50 focus:bg-white text-slate-900 placeholder:text-slate-400 focus:outline-none transition-all ${
-                      errors.email
-                        ? 'border-rose-400 ring-2 ring-rose-100'
-                        : 'border-slate-200 focus:border-rose-500 focus:ring-2 focus:ring-rose-100'
-                    }`}
+                    id="phoneLocal"
+                    type="tel"
+                    autoComplete="tel"
+                    placeholder="24 555 0192"
+                    value={phoneLocalNumber}
+                    onChange={(e) => setPhoneLocalNumber(e.target.value)}
+                    className="field-input"
+                    style={{ flex: 1 }}
+                    aria-describedby={errors.phone ? 'phone-err' : undefined}
                   />
                 </div>
-                {errors.email && (
-                  <p className="flex items-center gap-1 text-xs text-rose-600 mt-1 font-medium">
-                    <AlertCircle className="w-3.5 h-3.5" />
-                    {errors.email}
-                  </p>
-                )}
+                {errors.phone && <p className="field-error" id="phone-err">{errors.phone}</p>}
               </div>
 
-              {/* Attendance Options */}
-              <div>
-                <label className="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">
-                  Will you be attending the Beating Odds Foundation Launch? <span className="text-rose-500">*</span>
-                </label>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => setStatus('attending')}
-                    className={`p-3 text-left rounded-xl border transition-all ${
-                      status === 'attending'
-                        ? 'border-rose-600 bg-rose-50/70 text-slate-900 shadow-2xs ring-1 ring-rose-600'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-700 hover:bg-slate-100'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold">Yes, I will be there.</span>
-                      {status === 'attending' && <CheckCircle2 className="w-4 h-4 text-rose-600" />}
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      We look forward to welcoming you.
-                    </p>
-                  </button>
+              {/* Email */}
+              <div className="field-group">
+                <label className="field-label" htmlFor="email">Email Address</label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="you@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="field-input"
+                  aria-describedby={errors.email ? 'email-err' : undefined}
+                />
+                {errors.email && <p className="field-error" id="email-err">{errors.email}</p>}
+              </div>
 
-                  <button
-                    type="button"
-                    onClick={() => setStatus('declined')}
-                    className={`p-3 text-left rounded-xl border transition-all ${
-                      status === 'declined'
-                        ? 'border-rose-600 bg-rose-50/70 text-slate-900 shadow-2xs ring-1 ring-rose-600'
-                        : 'border-slate-200 bg-slate-50/50 text-slate-700 hover:bg-slate-100'
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold">Unfortunately, I won&apos;t be able to attend.</span>
-                      {status === 'declined' && <CheckCircle2 className="w-4 h-4 text-rose-600" />}
-                    </div>
-                    <p className="text-[11px] text-slate-500 mt-1">
-                      Thank you for letting us know.
-                    </p>
-                  </button>
 
+
+              {/* Submit error */}
+              {errors.submit && (
+                <div style={{
+                  display: 'flex', alignItems: 'center', gap: '0.5rem',
+                  padding: '0.75rem 1rem', borderRadius: '0.6rem',
+                  background: '#fef3c7', border: '1px solid #fcd34d',
+                  marginBottom: '1rem',
+                }}>
+                  <AlertCircle style={{ width: '0.9rem', height: '0.9rem', color: '#92400e', flexShrink: 0 }} />
+                  <p style={{ fontSize: '0.78rem', color: '#92400e', margin: 0 }}>{errors.submit}</p>
                 </div>
-              </div>
+              )}
 
-              {/* Submit Button */}
-              <div className="pt-2">
-                {errors.submit && (
-                  <p className="text-center text-sm text-rose-600 mb-3">{errors.submit}</p>
+              <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                {isSubmitting ? (
+                  <>
+                    <span className="spin" style={{ display: 'inline-block', width: '0.9rem', height: '0.9rem', border: '2px solid rgba(255,253,249,0.4)', borderTopColor: '#fffdf9', borderRadius: '50%' }} />
+                    Saving your RSVP…
+                  </>
+                ) : (
+                  <>
+                    Confirm My Attendance
+                    <Heart style={{ width: '0.85rem', height: '0.85rem', fill: 'currentColor' }} />
+                  </>
                 )}
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-base font-bold text-white bg-gradient-to-r from-rose-600 to-red-600 hover:from-rose-700 hover:to-red-700 rounded-xl shadow-md shadow-rose-600/20 transition-all active:scale-98 disabled:opacity-75 cursor-pointer"
-                >
-                  {isSubmitting ? (
-                    <>
-                      <div className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />
-                      <span>Confirming Your RSVP...</span>
-                    </>
-                  ) : (
-                    <>
-                      <Heart className="w-4 h-4 fill-white" />
-                      <span>Confirm Attendance Registration</span>
-                    </>
-                  )}
-                </button>
-                <p className="text-center text-[11px] text-slate-500 mt-2">
-                  🔒 Your information is kept strictly private by Beating Odds Foundation for attendee planning only.
-                </p>
-              </div>
+              </button>
+
+              <p style={{ textAlign: 'center', fontSize: '0.68rem', color: 'var(--clr-muted)', marginTop: '0.85rem' }}>
+                Your details are kept private and used only for this event.
+              </p>
+            </form>
+          </div>
+
+        ) : attendanceChoice === 'declined' ? (
+          /* ── DECLINED ── */
+          <div className="decline-card">
+            <div style={{
+              width: '3.5rem', height: '3.5rem', borderRadius: '50%',
+              background: 'var(--clr-parchment)', border: '1px solid var(--clr-sand)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1rem',
+            }}>
+              <Heart style={{ width: '1.4rem', height: '1.4rem', color: 'var(--clr-gold)' }} />
             </div>
-          </form>
-        )}
+            <h3 style={{
+              fontFamily: '"Playfair Display", Georgia, serif',
+              fontSize: '1.35rem', fontWeight: 500, color: 'var(--clr-brown)', margin: '0 0 0.5rem',
+            }}>
+              Thank you for letting us know.
+            </h3>
+            <p style={{ fontSize: '0.85rem', color: 'var(--clr-muted)', lineHeight: 1.65, maxWidth: '28rem', margin: '0 auto 1.5rem' }}>
+              We're sorry you won't be able to join us. You can still follow our journey and support the cause by sharing the event with others.
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.6rem', justifyContent: 'center' }}>
+              <a
+                href={getWhatsAppShareUrl(window.location.href, event)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="confirm-action-btn primary"
+              >
+                <Share2 style={{ width: '0.8rem', height: '0.8rem' }} />
+                Share with Friends
+              </a>
+              <button type="button" onClick={() => setAttendanceChoice(null)} className="confirm-action-btn">
+                Change My Response
+              </button>
+            </div>
+          </div>
+
+        ) : null}
       </div>
     </section>
   );

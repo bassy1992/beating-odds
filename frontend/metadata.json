@@ -1,6 +1,6 @@
 {
   "name": "Beating Odds Foundation - Event RSVP",
-  "description": "Attendee registration and event details for Beating Odds Foundation's Anti-Cipate programme.",
+  "description": "Beating Odds Foundation’s Official Launch",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }
