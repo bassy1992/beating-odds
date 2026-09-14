@@ -23,7 +23,10 @@ export default defineConfig(() => {
     },
     preview: {
       host: '0.0.0.0',
-      allowedHosts: 'all',
+      allowedHosts: [
+        'beating-odds-production-761a.up.railway.app',
+        ...(process.env.RAILWAY_PUBLIC_DOMAIN ? [process.env.RAILWAY_PUBLIC_DOMAIN] : []),
+      ],
     },
   };
 });
