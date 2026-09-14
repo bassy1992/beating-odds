@@ -8,10 +8,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'django-insecure-change-this-in-production')
 DEBUG = os.getenv('DJANGO_DEBUG', 'False').lower() == 'true'
 
+railway_public_domain = os.getenv('RAILWAY_PUBLIC_DOMAIN', 'beating-odds-production-761a.up.railway.app')
+
 # Set DJANGO_ALLOWED_HOSTS to the Railway domain (and any custom domain).
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv('DJANGO_ALLOWED_HOSTS', '127.0.0.1,localhost').split(',')
+    for host in os.getenv(
+        'DJANGO_ALLOWED_HOSTS',
+        f'127.0.0.1,localhost,{railway_public_domain}',
+    ).split(',')
     if host.strip()
 ]
 
