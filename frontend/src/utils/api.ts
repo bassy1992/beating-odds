@@ -1,6 +1,7 @@
 import { Attendee } from '../types';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL
+  || (import.meta.env.PROD ? 'https://beating-odds-api-production.up.railway.app/api' : '/api');
 
 export async function registerAttendee(attendee: Omit<Attendee, 'id' | 'registeredAt' | 'checkedIn'>): Promise<Attendee> {
   const response = await fetch(`${API_BASE_URL}/attendees/`, {
