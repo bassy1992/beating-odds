@@ -25,5 +25,9 @@ Create a Railway service from this repository with its **Root Directory** set to
 `frontend`. Set `VITE_API_URL` to the public URL of the deployed Django service,
 including `/api`, for example `https://my-api.up.railway.app/api`.
 
+For the Vercel deployment, set the same `VITE_API_URL` environment variable in
+the Vercel project settings and redeploy. The public frontend URL is
+`https://beating-odds-foundation-event-rsvp.vercel.app/`.
+
 The frontend can be deployed independently as a static Vite site. The backend's
 Railway configuration is kept in `backend/railway.toml`.
