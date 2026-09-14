@@ -82,3 +82,14 @@ CORS_ALLOWED_ORIGINS = [
     ).split(',')
     if origin.strip()
 ]
+
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.getenv(
+        'CSRF_TRUSTED_ORIGINS',
+        'http://localhost:3000,http://127.0.0.1:3000,'
+        'https://beating-odds-foundation-event-rsvp.vercel.app,'
+        'https://beating-odds-api-production.up.railway.app',
+    ).split(',')
+    if origin.strip()
+]
